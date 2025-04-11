@@ -1,0 +1,17 @@
+#include <Keyboard.h>
+
+void setup() {
+  delay(2000); // Đợi hệ điều hành nhận thiết bị
+
+  // Mở Run (Windows + R)
+  Keyboard.press(KEY_LEFT_GUI);
+  Keyboard.press('r');
+  Keyboard.releaseAll();
+  delay(500);
+
+  // Gõ lệnh mở PowerShell
+  Keyboard.print("powershell");
+  Keyboard.press(KEY_RETURN);
+  Keyboard.releaseAll();
+  delay(1000);
+  Commit new file
